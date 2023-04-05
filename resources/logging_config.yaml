@@ -1,0 +1,40 @@
+version: 1
+
+disable_existing_loggers: true
+
+formatters:
+  error:
+    format: "%(asctime)s - [%(levelname)-5s | %(name)s.%(funcName)s():] %(message)s"
+    datefmt: '%d-%m-%Y %H:%M:%S'
+  info:
+    format: "%(asctime)s - [%(levelname)-5s | %(name)s.%(funcName)s():] %(message)s"
+    datefmt: '%d-%m-%Y %H:%M:%S'
+  telegram:
+    class': telegram_handler.HtmlFormatter
+    fmt: '%(levelname)s %(message)s'
+    use_emoji: True
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: info
+    stream: ext://sys.stdout
+  file:
+    class: logging.handlers.TimedRotatingFileHandler
+    filename: arbi-scanner.log
+    when: d
+    interval: 1
+    backupCount: 5
+    level: DEBUG
+    formatter: info
+  telegram:
+    class: telegram_handler.TelegramHandler
+    formatter: telegram
+    level: INFO
+
+root:
+  level: DEBUG
+  handlers: [console, file, telegram]
+  propagate: yes
+
